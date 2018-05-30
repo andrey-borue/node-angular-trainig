@@ -3,7 +3,7 @@ const https = require('https');
 const PORT = process.env.PORT || 3000;
 const fs = require('fs');
 const querystring = require('querystring');
-const apiHost = 'https://translate.yandex.net';
+const apiHost = 'translate.yandex.net';
 const apiPath = '/api/v1.5/tr.json/translate';
 const apiKey = 'trnsl.1.1.20160723T183155Z.f2a3339517e26a3c.d86d2dc91f2e374351379bb3fe371985273278df';
 
@@ -23,39 +23,30 @@ const postHandler = (request, response) => {
       response.writeHead(200, 'OK', {'Content-Type': 'text/html'});
 
       const apiRequest = https.request({
+        'method': "GET",
         'host': apiHost,
-        'path': apiPath
+        'path': apiPath + '?' + querystring.stringify({
+          'key': apiKey,
+          'text': data.text,
+          'lang': 'ru-en'
+        })
       });
 
-      apiRequest.on('data', () => {
-        console.log('dddd');
+      apiRequest.on('response', (apiResponse) => {
+        let apiData = '';
+        apiResponse.on('data', (chunk) => {apiData += chunk; });
+        apiResponse.on('end', () => {
+          response.write(JSON.parse(apiData).text.join(' '));
+          response.end();
+        });
       });
 
       apiRequest.on('error', (err) => {
         console.log(err);
       });
 
-      apiRequest.write(querystring.stringify({
-          'key': apiKey,
-          'text': data.text,
-          'lang': 'ru-en'
-      }));
-
       apiRequest.end();
-
-      response.end();
     });
-
-
-  // let data = querystring.stringify({
-  //   'key': 'trnsl.1.1.20160723T183155Z.f2a3339517e26a3c.d86d2dc91f2e374351379bb3fe371985273278df',
-  //   'text': 1,
-  //   'lang': 'ru-en'
-  // });
-
-  // https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20160723T183155Z.f2a3339517e26a3c.d86d2dc91f2e374351379bb3fe371985273278df&
-  // text=%D0%BA%D0%BD%D0%B8%D0%B3%D0%B0&lang=ru-en
-
 };
 
 const handler = (request, response) => {
