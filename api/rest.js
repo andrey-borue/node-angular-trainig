@@ -1,7 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
-
 const app = express();
 
 const userApi = express.Router();
@@ -35,7 +33,7 @@ userApi.get('/:id', (request, response) => {
 });
 
 userApi.post('/', (request, response) => {
-  console.log(request.body);
+  const id = users.length;
   users.push(request.body);
   response.json(users[id]);
 });
