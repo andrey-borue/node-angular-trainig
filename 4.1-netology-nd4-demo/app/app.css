@@ -23,3 +23,15 @@
   content: "|";
   padding-right: 0.3em;
 }
+
+.green_color {
+  color: green;
+}
+
+.blue_color {
+  color: blue;
+}
+
+.red_color {
+  color: red;
+}

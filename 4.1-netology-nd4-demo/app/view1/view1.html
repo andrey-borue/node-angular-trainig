@@ -5,17 +5,25 @@
 <select ng-model="myOrderProperty">
     <option value="id">ID</option>
     <option value="weight">Весу</option>
+    <option value="-weight">Убыванию веса</option>
     <option value="height">Росту</option>
+    <option value="name">Имя</option>
+</select>
+
+Фильтровать по типу:
+<select ng-model="myTypeFilter">
+    <option ng-repeat="type in pokemons | onlyTypesFilter" value="{{type}}">{{type}}</option>
 </select>
 
 <ul>
-    <li ng-repeat="pokemon in pokemons | filter: myQuery | orderBy: myOrderProperty">
-        <img src="{{pokemon.ThumbnailImage}}">
+    <li ng-repeat="pokemon in pokemons | filter: myQuery | typeFilter: myTypeFilter | orderBy: myOrderProperty">
+        <img src="{{pokemon.ThumbnailImage}}" ng-click="alertName(pokemon.name)">
 
         <small>ID #{{pokemon.id }}</small>
-        <h1>{{pokemon.name}}</h1>
+        <!--<h1 ng-class="pokemon.type[0]">{{pokemon.name}}</h1>-->
+        <h1 ng-class="generateNameClass(pokemon)">{{pokemon.name}}</h1>
         <p>Вес: {{pokemon.weight}}, рост: {{pokemon.height}}</p>
-        <p>Тип: {{pokemon.type [0]}}</p>
+        <p>Тип: {{pokemon.type[0]}}</p>
         <hr />
     </li>
 </ul>

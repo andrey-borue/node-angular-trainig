@@ -121,5 +121,21 @@ angular.module('myApp.view1', ['ngRoute'])
         }];
 
         $scope.myOrderProperty = 'id';
+        $scope.myTypeFilter = '';
+        $scope.alertName = (name) => {
+            alert(name);
+        };
+
+        $scope.generateNameClass = (pokemon) => {
+            if (pokemon.type.indexOf('water') >= 0) {
+                return 'blue_color';
+            }
+            if (pokemon.type.indexOf('fire') >= 0) {
+                return 'red_color';
+            }
+            if (pokemon.type.indexOf('grass') >= 0) {
+                return 'green_color';
+            }
+        };
 
     });
